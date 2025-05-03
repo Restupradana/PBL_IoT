@@ -73,41 +73,22 @@
     });
 
     function saveProfile() {
-        let newUsername = document.getElementById("usernameInput").value;
-        let newPhone = document.getElementById("phoneInput").value;
-        let newEmail = document.getElementById("emailInput").value;
-        let newAddress = document.getElementById("addressInput").value;
+    let newUsername = document.getElementById("usernameInput").value;
+    let newPhone = document.getElementById("phoneInput").value;
+    let newEmail = document.getElementById("emailInput").value;
+    let newAddress = document.getElementById("addressInput").value;
 
-        localStorage.setItem("username", newUsername);
-        localStorage.setItem("phone", newPhone);
-        localStorage.setItem("email", newEmail);
-        localStorage.setItem("address", newAddress);
+    localStorage.setItem("username", newUsername);
+    localStorage.setItem("phone", newPhone);
+    localStorage.setItem("email", newEmail);
+    localStorage.setItem("address", newAddress);
 
-        alert("Profile berhasil diperbarui!");
-        <a href="{{ route('user.index') }}" class="btn btn-primary">Submit</a>
-    }
-    <form id="userForm" onsubmit="saveProfile(); return true;">
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    alert("Profile berhasil diperbarui!");
+    window.location.href = "{{ route('user.index') }}"; // Redirect ke dashboard
+}
 
-<script>
-    function saveProfile() {
-        let newUsername = document.getElementById("usernameInput").value;
-        localStorage.setItem("username", newUsername);
 
-        let newPhone = document.getElementById("phoneInput").value;
-        localStorage.setItem("phone", newPhone);
-
-        let newEmail = document.getElementById("emailInput").value;
-        localStorage.setItem("email", newEmail);
-
-        let newAddress = document.getElementById("addressInput").value;
-        localStorage.setItem("address", newAddress);
-
-        alert("Profile berhasil diperbarui!");
-    }
-</script>
-    window.onload = openProfileModal;
+   
 </script>
 
 </body>
