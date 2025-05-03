@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,26 +29,7 @@
         <!-- Main Content -->
         <div class="flex-grow-1 d-flex flex-column" style="min-height: 100vh;">
 
-            <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white shadow-sm px-4 justify-content-end align-items-center" style="height: 60px;">
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0D8ABC&color=fff"
-                             alt="avatar" width="32" height="32" class="rounded-circle me-2">
-                        <strong>{{ Auth::user()->name }}</strong>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="dropdown-item">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+
 
             <!-- Page Heading -->
             @isset($header)
