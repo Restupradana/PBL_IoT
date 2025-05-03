@@ -110,14 +110,18 @@ body {
         </ul>
 
         <!-- User Section -->
-        <a href="}" class="d-flex align-items-center p-2 text-dark text-decoration-none" 
-           style="position: absolute; bottom: 10px; left: 10px; right: 10px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <div class="bg-white d-flex justify-content-center align-items-center" 
-                 style="width: 40px; height: 40px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <i class="bi bi-people-fill fs-4 text-dark"></i>
-            </div>
-            <span class="ms-2">User</span>
-        </a>
+<a href="{{ route('user.edituser') }}"  class="d-flex align-items-center p-2 text-dark text-decoration-none" onclick="openProfileModal()"
+   style="display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+
+    <!-- Foto Profil -->
+    <div class="bg-white d-flex justify-content-center align-items-center"
+         style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden;">
+        <img id="profileImage" src="default-profile.png" alt="User Profile"
+             style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+
+    <span id="usernameDisplay">User</span>
+</a>
     </div>
 
         
@@ -135,12 +139,48 @@ body {
 
         
          <!-- Waste Types -->
-         <div class="waste-types">
-                    <p>Organic waste: 50%</p>
-                    <p>Plastic/glass bottle waste: 50%</p>
-                    <p>Metal: 50%</p>
-                </div>
+         <div class="flex-container">
+    <h2 class="flex-item">The total of every waste</h2>
+    <div class="waste-types flex-item">
+        <p>Organic waste: 50%</p>
+        <p>Plastic/glass bottle waste: 50%</p>
+        <p>Metal: 50%</p>
+    </div>
+</div>
 
-    
+   
+                <script>
+    function fetchRubbishStatus() {
+        $.ajax({
+            url: '/api/rubbish-status', // Endpoint API
+            method: 'GET',
+            success: function (data) {
+                // Perbarui progress circle
+                $('.progress-circle').css(
+                    'background', 
+                    `conic-gradient(#007BFF ${data.total_rubbish}%, #e0e0e0 ${data.total_rubbish}%)`
+                );
+                $('.progress-circle .percentage').text(data.total_rubbish + '%');
+
+                // Perbarui jenis sampah
+                $('.waste-types').html(`
+                    <p>Organic waste: ${data.organic}%</p>
+                    <p>Plastic/glass bottle waste: ${data.plastic}%</p>
+                    <p>Metal: ${data.metal}%</p>
+                `);
+            },
+            error: function () {
+                console.error('Failed to fetch rubbish status');
+            }
+        });
+    }
+
+    // Panggil fungsi setiap 5 detik untuk pembaruan real-time
+    setInterval(fetchRubbishStatus, 5000);
+
+    // Load pertama kali
+    fetchRubbishStatus();
+</script>                
+
 </body>
 </html>

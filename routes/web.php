@@ -38,7 +38,8 @@ Route::get('/', function () {
 
 Route::get('/user/index', function () {
     return view('user.index');
-});
+})->name('user.index');
+
 Route::get('/user/dashboard', function () {
     return view('user.dashboard');
 })->name('user.dashboard');
@@ -54,6 +55,10 @@ Route::get('/user/location', function () {
 Route::get('/user/history', function () {
     return view('user.history');
 })->name('user.history');
+
+Route::get('/user/edituser', function () {
+    return view('user.edituser');
+})->name('user.edituser');
 
 #logout
 Route::post('/logout', function () {
