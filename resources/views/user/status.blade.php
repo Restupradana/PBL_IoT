@@ -119,62 +119,41 @@ body {
             <span class="ms-2">User</span>
         </a>
     </div>
-
 <style>
-.progress-container {
-    display: flex;
-    flex-direction: column;
+    .progress-container {
+    text-align: center;
+    margin: 10px;
+}
+
+.progress-row {
+    display: flex; /* Susun progress circle dan status secara horizontal */
     align-items: center;
-    margin: 20px;
+    gap: 20px; /* Jarak antar elemen */
 }
 
 .progress-circle {
-    width: 150px;
-    height: 150px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: white;
-    position: relative;
-}
-
-.progress-circle .circle {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    background-color: #ddd; /* Warna lingkaran default */
 }
 
 .status-detail {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 18px;
+    text-align: left; /* Status tetap tersusun ke bawah */
 }
-
-.organic {
-    background: conic-gradient(#4CAF50 85%, #e0e0e0 85%);
-}
-
-.plastic {
-    background: conic-gradient(#FFC107 60%, #e0e0e0 60%);
-}
-
-.metal {
-    background: conic-gradient(#F44336 40%, #e0e0e0 40%);
-}
-</style>
 
 <div class="container mt-4">
     <h1 class="text-center mb-4">Status Tempat Sampah</h1>
+ </div>
 
-    <div class="d-flex justify-content-around">
-        <!-- Organik -->
-        <div class="progress-container">
+ <div class="d-flex justify-content-around">
+    <!-- Organik -->
+    <div class="progress-container">
+        <h4 class="text-center fw-bold">Sampah Organik</h4>
+        <div class="progress-row">
             <div class="progress-circle organic">
                 <div class="circle">
                     <span class="percentage" id="organic-circle">85%</span>
@@ -186,9 +165,12 @@ body {
                 <p>Waktu: <span id="organic-time">10:45 AM</span></p>
             </div>
         </div>
+    </div>
 
-        <!-- Plastik -->
-        <div class="progress-container">
+    <!-- Plastik -->
+    <div class="progress-container">
+        <h4 class="text-center fw-bold">Sampah Plastik</h4>
+        <div class="progress-row">
             <div class="progress-circle plastic">
                 <div class="circle">
                     <span class="percentage" id="plastic-circle">60%</span>
@@ -200,9 +182,12 @@ body {
                 <p>Waktu: <span id="plastic-time">10:45 AM</span></p>
             </div>
         </div>
+    </div>
 
-        <!-- Metal -->
-        <div class="progress-container">
+    <!-- Metal -->
+    <div class="progress-container">
+        <h4 class="text-center fw-bold">Sampah Metal</h4>
+        <div class="progress-row">
             <div class="progress-circle metal">
                 <div class="circle">
                     <span class="percentage" id="metal-circle">40%</span>
@@ -211,12 +196,14 @@ body {
             <div class="status-detail">
                 <p>Kapasitas: <span id="metal-capacity">40%</span></p>
                 <p>Berat: <span id="metal-weight">5 kg</span></p>
-                <p>Kelembapan: <span id="metal-humidity">30%</span></p>
                 <p>Waktu: <span id="metal-time">10:45 AM</span></p>
             </div>
         </div>
     </div>
 </div>
+ 
+      
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -253,7 +240,6 @@ body {
                 $('#metal-circle').text(data.metal.capacity + '%');
                 $('#metal-capacity').text(data.metal.capacity + '%');
                 $('#metal-weight').text(data.metal.weight);
-                $('#metal-humidity').text(data.metal.humidity);
                 $('#metal-time').text(data.metal.time);
             },
             error: function () {
