@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,13 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Membuat 10 user menggunakan factory
-        User::factory(10)->create();
+        // Menjalankan seeder UsersTableSeeder
+        $this->call([
+            UsersTableSeeder::class,
+        ]);
 
-        // Atau, jika hanya ingin membuat satu user dengan detail tertentu
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Jika ingin menambahkan user dummy dengan factory, aktifkan ini:
+        // \App\Models\User::factory(10)->create();
     }
 }
