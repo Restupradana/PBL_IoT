@@ -36,9 +36,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/user/index', function () {
-    return view('user.index');
-})->name('user.index');
+
 
 Route::get('/user/dashboard', function () {
     return view('user.dashboard');
@@ -56,14 +54,28 @@ Route::get('/user/history', function () {
     return view('user.history');
 })->name('user.history');
 
-Route::get('/user/edituser', function () {
-    return view('user.edituser');
-})->name('user.edituser');
 
 #logout
 Route::post('/logout', function () {
     // Logika logout di sini
     return redirect('/');
 })->name('logout');
+
+Route::get('/janitor/dashboard', function () {
+    return view('janitor.dashboard');
+})->name('janitor.dashboard');
+
+Route::get('/janitor/status', function () {
+    return view('janitor.status');
+})->name('janitor.status');
+
+Route::get('/janitor/location', function () {
+    return view('janitor.location');
+})->name('janitor.location');
+
+Route::get('/janitor/history', function () {
+    return view('janitor.history');
+})->name('janitor.history');
+
 
 require __DIR__.'/auth.php';
