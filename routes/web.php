@@ -36,7 +36,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
 
+Route::get('/admin/status', function () {
+    return view('admin.status');
+})->name('admin.status');
+
+Route::get('/admin/location', function () {
+    return view('admin.location');
+})->name('admin.location');
+
+Route::get('/admin/history', function () {
+    return view('admin.history');
+})->name('admin.history');
 
 Route::get('/user/dashboard', function () {
     return view('user.dashboard');
@@ -76,6 +90,8 @@ Route::get('/janitor/location', function () {
 Route::get('/janitor/history', function () {
     return view('janitor.history');
 })->name('janitor.history');
+
+
 
 
 require __DIR__.'/auth.php';
