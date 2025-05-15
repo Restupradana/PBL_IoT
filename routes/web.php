@@ -2,96 +2,47 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-
-// use App\Http\Controllers\AuthController;
-// use App\Http\Controllers\ForgotPasswordController;
-
-// // Login & Register
-// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-// Route::post('/login', [AuthController::class, 'login']);
-
-// Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-// Route::post('/register', [AuthController::class, 'register']);
-
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// // Lupa Password
-// Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-// Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-
+// Route umum
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+// Dashboard umum
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/admin/status', function () {
-    return view('admin.status');
-})->name('admin.status');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('/admin/location', function () {
-    return view('admin.location');
-})->name('admin.location');
+    // Logout pakai controller resmi Laravel Breeze / Fortify
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
 
-Route::get('/admin/history', function () {
-    return view('admin.history');
-})->name('admin.history');
+// Group route berdasarkan role dengan middleware custom 'role:admin' misalnya
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('/status', fn() => view('admin.status'))->name('status');
+    Route::get('/location', fn() => view('admin.location'))->name('location');
+    Route::get('/history', fn() => view('admin.history'))->name('history');
+});
 
-Route::get('/user/dashboard', function () {
-    return view('user.dashboard');
-})->name('user.dashboard');
+Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', fn() => view('user.dashboard'))->name('dashboard');
+    Route::get('/status', fn() => view('user.status'))->name('status');
+    Route::get('/location', fn() => view('user.location'))->name('location');
+    Route::get('/history', fn() => view('user.history'))->name('history');
+});
 
-Route::get('/user/status', function () {
-    return view('user.status');
-})->name('user.status');
-
-Route::get('/user/location', function () {
-    return view('user.location');
-})->name('user.location');
-
-Route::get('/user/history', function () {
-    return view('user.history');
-})->name('user.history');
-
-
-#logout
-Route::post('/logout', function () {
-    // Logika logout di sini
-    return redirect('/');
-})->name('logout');
-
-Route::get('/janitor/dashboard', function () {
-    return view('janitor.dashboard');
-})->name('janitor.dashboard');
-
-Route::get('/janitor/status', function () {
-    return view('janitor.status');
-})->name('janitor.status');
-
-Route::get('/janitor/location', function () {
-    return view('janitor.location');
-})->name('janitor.location');
-
-Route::get('/janitor/history', function () {
-    return view('janitor.history');
-})->name('janitor.history');
-
-
-
+Route::middleware(['auth', 'role:janitor'])->prefix('janitor')->name('janitor.')->group(function () {
+    Route::get('/dashboard', fn() => view('janitor.dashboard'))->name('dashboard');
+    Route::get('/status', fn() => view('janitor.status'))->name('status');
+    Route::get('/location', fn() => view('janitor.location'))->name('location');
+    Route::get('/history', fn() => view('janitor.history'))->name('history');
+});
 
 require __DIR__.'/auth.php';
