@@ -2,12 +2,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth dark">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SmartTrashBin</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
     <!-- Tailwind CSS CDN -->
@@ -25,9 +25,9 @@
                         trashDark: '#16a34a',
                         bgDark: '#0a0a0a',
                         bgLight: '#FDFDFC',
-                    }
-                }
-            }
+                    },
+                },
+            },
         };
     </script>
 </head>
@@ -66,8 +66,6 @@
     <main class="text-center max-w-2xl">
         <img src="{{ asset('storage/sampul/SmartTrashBin.jpg') }}" alt="Foto Sampul Smart Trash Bin"
             class="w-full max-w-4xl mx-auto mb-6 rounded-xl shadow-lg object-cover h-48 sm:h-64 md:h-80 transition duration-300 dark:brightness-90" />
-
-
 
         <h1 class="text-3xl lg:text-4xl font-bold text-trashGreen dark:text-green-400 mb-4">
             Selamat Datang di Smart Trash Bin
