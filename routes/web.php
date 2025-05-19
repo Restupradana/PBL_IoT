@@ -45,4 +45,7 @@ Route::middleware(['auth', 'role:janitor'])->prefix('janitor')->name('janitor.')
     Route::get('/history', fn() => view('janitor.history'))->name('history');
 });
 
+Route::post('/notifikasi/kirim', [\App\Http\Controllers\NotifikasiController::class, 'kirim'])->name('notifikasi.kirim');
+
+
 require __DIR__.'/auth.php';

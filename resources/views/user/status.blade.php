@@ -59,23 +59,38 @@
                                 <p>Berat: <span id="organic-weight">12 kg</span></p>
                                 <p>Waktu: <span id="organic-time">10:45 AM</span></p>
                             </div>
-                        </div>
-                    </div>
+                            <form action="{{ route('notifikasi.kirim') }}" method="POST" class="mt-3">
+ @csrf
+ <input type="hidden" name="jenis" value="Organik">
+ <input type="hidden" name="kapasitas" id="organic-capacity-input" value="85">
+ <input type="hidden" name="berat" id="organic-weight-input" value="12">
+<button type="submit" class="btn btn-danger btn-sm">Kirim Notifikasi</button>
+</form>
+                             </div>
+                              </div>
 
-                    {{-- Plastik --}}
+                    {{-- Botol plastik/kaca Plastik --}}
                     <div class="progress-container">
-                        <h4 class="text-center fw-bold">Sampah Plastik</h4>
+                        <h4 class="text-center fw-bold">Sampah Botol Plastik/Kaca</h4>
                         <div class="progress-row">
-                            <div class="progress-circle plastic">
+                            <div class="progress-circle plastik/kaca">
                                 <div class="circle">
-                                    <span class="percentage" id="plastic-circle">60%</span>
+                                    <span class="percentage" id="plastik/kaca-circle">60%</span>
                                 </div>
                             </div>
                             <div class="status-detail">
-                                <p>Kapasitas: <span id="plastic-capacity">60%</span></p>
-                                <p>Berat: <span id="plastic-weight">8 kg</span></p>
-                                <p>Waktu: <span id="plastic-time">10:45 AM</span></p>
+                                <p>Kapasitas: <span id="plastik/kaca-capacity">60%</span></p>
+                                <p>Berat: <span id="plastik/kaca-weight">8 kg</span></p>
+                                <p>Waktu: <span id="plastik/kaca-time">10:45 AM</span></p>
                             </div>
+                            <form action="{{ route('notifikasi.kirim') }}" method="POST" class="mt-3">
+    @csrf
+    <input type="hidden" name="jenis" value="Plastik/Kaca">
+    <input type="hidden" name="kapasitas" id="plastik/kaca-capacity-input" value="85">
+    <input type="hidden" name="berat" id="plastik/kaca-weight-input" value="12">
+    <button type="submit" class="btn btn-danger btn-sm">Kirim Notifikasi</button>
+</form>
+
                         </div>
                     </div>
 
@@ -93,6 +108,14 @@
                                 <p>Berat: <span id="metal-weight">5 kg</span></p>
                                 <p>Waktu: <span id="metal-time">10:45 AM</span></p>
                             </div>
+                            <form action="{{ route('notifikasi.kirim') }}" method="POST" class="mt-3">
+    @csrf
+    <input type="hidden" name="jenis" value="Metal">
+    <input type="hidden" name="kapasitas" id="metal-capacity-input" value="85">
+    <input type="hidden" name="berat" id="metal-weight-input" value="12">
+    <button type="submit" class="btn btn-danger btn-sm">Kirim Notifikasi</button>
+</form>
+
                         </div>
                     </div>
                 </div>
@@ -148,50 +171,62 @@
 </style>
 @endpush
 
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchWasteStatus() {
+        $.ajax({
+            url: '/api/waste-status',
+            method: 'GET',
+            success: function (data) {
+                // ORGANIK
+                $('.organic').css(
+                    'background',
+                    `conic-gradient(#4CAF50 ${data.organic.capacity}%,rgb(172, 58, 58) ${data.organic.capacity}%)`
+                );
+                $('#organic-circle').text(data.organic.capacity + '%');
+                $('#organic-capacity').text(data.organic.capacity + '%');
+                $('#organic-weight').text(data.organic.weight);
+                $('#organic-time').text(data.organic.time);
 
-    @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function fetchWasteStatus() {
-            $.ajax({
-                url: '/api/waste-status',
-                method: 'GET',
-                success: function (data) {
-                    $('.organic').css(
-                        'background',
-                        `conic-gradient(#4CAF50 ${data.organic.capacity}%,rgb(172, 58, 58) ${data.organic.capacity}%)`
-                    );
-                    $('#organic-circle').text(data.organic.capacity + '%');
-                    $('#organic-capacity').text(data.organic.capacity + '%');
-                    $('#organic-weight').text(data.organic.weight);
-                    $('#organic-time').text(data.organic.time);
+                // PLASTIK/KACA
+                $('.plastik/kaca').css(
+                    'background',
+                    `conic-gradient(#FFC107 ${data.plastik/kaca.capacity}%,rgb(55, 198, 45) ${data.plastik/kaca.capacity}%)`
+                );
+                $('#plastik/kaca-circle').text(data.plastik/kaca.capacity + '%');
+                $('#plastik/kaca-capacity').text(data.plastik/kaca.capacity + '%');
+                $('#plastik/kaca-weight').text(data.plastik/kaca.weight);
+                $('#plastik/kaca-time').text(data.plastik/kaca.time);
 
-                    $('.plastic').css(
-                        'background',
-                        `conic-gradient(#FFC107 ${data.plastic.capacity}%,rgb(55, 198, 45) ${data.plastic.capacity}%)`
-                    );
-                    $('#plastic-circle').text(data.plastic.capacity + '%');
-                    $('#plastic-capacity').text(data.plastic.capacity + '%');
-                    $('#plastic-weight').text(data.plastic.weight);
-                    $('#plastic-time').text(data.plastic.time);
+                // METAL
+                $('.metal').css(
+                    'background',
+                    `conic-gradient(#F44336 ${data.metal.capacity}%,rgb(16, 47, 100) ${data.metal.capacity}%)`
+                );
+                $('#metal-circle').text(data.metal.capacity + '%');
+                $('#metal-capacity').text(data.metal.capacity + '%');
+                $('#metal-weight').text(data.metal.weight);
+                $('#metal-time').text(data.metal.time);
 
-                    $('.metal').css(
-                        'background',
-                        `conic-gradient(#F44336 ${data.metal.capacity}%,rgb(16, 47, 100) ${data.metal.capacity}%)`
-                    );
-                    $('#metal-circle').text(data.metal.capacity + '%');
-                    $('#metal-capacity').text(data.metal.capacity + '%');
-                    $('#metal-weight').text(data.metal.weight);
-                    $('#metal-time').text(data.metal.time);
-                },
-                error: function () {
-                    console.error('Gagal mengambil data status sampah.');
-                }
-            });
-        }
+                // ✅ UPDATE HIDDEN INPUT UNTUK FORM NOTIFIKASI
+                $('#organic-capacity-input').val(data.organic.capacity);
+                $('#organic-weight-input').val(data.organic.weight);
 
-        setInterval(fetchWasteStatus, 5000);
-        fetchWasteStatus();
-    </script>
-    @endpush
+                $('#plastik/kaca-capacity-input').val(data.plastik/kaca.capacity);
+                $('#plastik/kaca-weight-input').val(data.plastik/kaca.weight);
+
+                $('#metal-capacity-input').val(data.metal.capacity);
+                $('#metal-weight-input').val(data.metal.weight);
+            },
+            error: function () {
+                console.error('Gagal mengambil data status sampah.');
+            }
+        });
+    }
+
+    setInterval(fetchWasteStatus, 5000);
+    fetchWasteStatus();
+</script>
+@endpush  
 </x-app-layout>
