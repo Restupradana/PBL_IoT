@@ -43,7 +43,7 @@ class UsersTableSeeder extends Seeder
                 'phone' => '087654321098',
                 'email' => 'petugas@example.com',
                 'email_verified_at' => now(),
-                'role' => 'petugas', // Role petugas
+                'role' => 'janitor', // Role petugas
                 'password' => Hash::make('petugas123'),
                 'remember_token' => \Str::random(10),
                 'created_at' => now(),

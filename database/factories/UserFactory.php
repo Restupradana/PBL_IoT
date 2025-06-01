@@ -23,13 +23,25 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $indonesianNames = [
+            'Budi Santoso', 'Siti Rahayu', 'Ahmad Wijaya', 'Dewi Lestari', 
+            'Eko Prasetyo', 'Rina Wati', 'Joko Susilo', 'Ani Kusuma', 
+            'Agus Setiawan', 'Maya Indah', 'Dian Permata', 'Hendra Gunawan',
+            'Ratna Sari', 'Bambang Sutrisno', 'Wati Suryani', 'Adi Nugroho',
+            'Sri Wahyuni', 'Rudi Hermawan', 'Lina Kartika', 'Dedi Kurniawan'
+        ];
+        
+        static $nameIndex = 0;
+        $name = $indonesianNames[$nameIndex % count($indonesianNames)];
+        $nameIndex++;
+        
         return [
-            'name' => fake()->name(),
+            'name' => $name,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => $this->faker->randomElement(['admin','janitor','user']),
             'remember_token' => Str::random(10),
-            'phone' => fake()->phoneNumber(),
         ];
     }
 
@@ -38,7 +50,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

@@ -1,51 +1,95 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TrashBinController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\TempatSampahController;
+use App\Http\Controllers\RiwayatPembuanganController;
+use App\Http\Controllers\ProfileController;
 
-// Route umum
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Guest routes
 Route::get('/', function () {
     return view('welcome');
+})->name('home');
+
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+    Route::post('login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+    
+    Route::get('register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
+        ->name('register');
+    Route::post('register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
+    
+    Route::get('forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+    Route::post('forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+    
+    Route::get('reset-password/{token}', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])
+        ->name('password.reset');
+    Route::post('reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
+        ->name('password.update');
 });
 
-// Dashboard umum
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('verify-email', [\App\Http\Controllers\Auth\EmailVerificationPromptController::class, '__invoke'])
+        ->name('verification.notice');
+    Route::get('verify-email/{id}/{hash}', [\App\Http\Controllers\Auth\VerifyEmailController::class, '__invoke'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+    Route::post('email/verification-notification', [\App\Http\Controllers\Auth\EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+    
+    Route::get('confirm-password', [\App\Http\Controllers\Auth\ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+    Route::post('confirm-password', [\App\Http\Controllers\Auth\ConfirmablePasswordController::class, 'store']);
+    
+    Route::post('logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});
 
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Password update route
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    // Logout pakai controller resmi Laravel Breeze / Fortify
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get("/locations", [TempatSampahController::class, 'location'])->name("locations.index");
+    Route::get("/status", [TempatSampahController::class, 'dashboard'])->name("status.index");
+    Route::get("/history", [RiwayatPembuanganController::class, 'index'])->name("history.index");
+    
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    
+    // Admin only routes
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('users', UserController::class);
+    });
 });
 
-// Group route berdasarkan role dengan middleware custom 'role:admin' misalnya
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::get('/status', fn() => view('admin.status'))->name('status');
-    Route::get('/location', fn() => view('admin.location'))->name('location');
-    Route::get('/history', fn() => view('admin.history'))->name('history');
+// API routes for IoT devices
+Route::prefix('api')->group(function () {
+    Route::post('/trash-data', [TrashBinController::class, 'postData'])->name('api.trash-data');
 });
-
-Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', fn() => view('user.dashboard'))->name('dashboard');
-    Route::get('/status', fn() => view('user.status'))->name('status');
-    Route::get('/location', fn() => view('user.location'))->name('location');
-    Route::get('/history', fn() => view('user.history'))->name('history');
-});
-
-Route::middleware(['auth', 'role:janitor'])->prefix('janitor')->name('janitor.')->group(function () {
-    Route::get('/dashboard', fn() => view('janitor.dashboard'))->name('dashboard');
-    Route::get('/status', fn() => view('janitor.status'))->name('status');
-    Route::get('/location', fn() => view('janitor.location'))->name('location');
-    Route::get('/history', fn() => view('janitor.history'))->name('history');
-});
-
-Route::post('/notifikasi/kirim', [\App\Http\Controllers\NotifikasiController::class, 'kirim'])->name('notifikasi.kirim');
-
-
-require __DIR__.'/auth.php';

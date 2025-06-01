@@ -1,24 +1,34 @@
 <?php
 
-// app/Models/TempatSampah.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TempatSampah extends Model
 {
-    // ... atribut dan relasi lainnya
+    use HasFactory;
 
-    // Accessor: Status Berdasarkan Persentase Isi
-    public function getStatusAttribute()
+    public $timestamps = false;
+    protected $table = 'tempat_sampah';
+
+    protected $fillable = [
+        'alamat_deskripsi', 'latitude', 'longitude', 'kapasitas_maksimal',
+        'berat_maksimal', 'kapasitas_saat_ini', 'berat_saat_ini', 'status', 'terakhir_diperbarui'
+    ];
+
+    public function notifikasi()
     {
-        if ($this->persentase_isi >= 80) {
-            return 'Penuh';
-        } elseif ($this->persentase_isi >= 40) {
-            return 'Setengah';
-        } else {
-            return 'Kosong';
-        }
+        return $this->hasMany(Notifikasi::class, 'id_tempat_sampah');
+    }
+
+    public function jadwalPengangkutan()
+    {
+        return $this->hasMany(JadwalPengangkutan::class, 'id_tempat_sampah');
+    }
+
+    public function riwayatPembuangan()
+    {
+        return $this->hasMany(RiwayatPembuangan::class, 'id_tempat_sampah');
     }
 }

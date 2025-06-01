@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Notifikasi;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,12 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Menjalankan seeder UsersTableSeeder
-        $this->call([
-            UsersTableSeeder::class,
-        ]);
+        // User::factory(10)->create();
 
-        // Jika ingin menambahkan user dummy dengan factory, aktifkan ini:
-        // \App\Models\User::factory(10)->create();
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+        // Report::factory(5)->create();
+
+        Notifikasi::factory(10)->create();
     }
 }
